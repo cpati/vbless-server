@@ -1,0 +1,6 @@
+src/main/resources/application.properties
+.settings
+.project
+.classpath
+.DS_Store
+target/
