@@ -1,15 +1,14 @@
 package com.sjsu.backbenchers.vBless.entity;
 
 import java.sql.Date;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Lob;
-
 import org.hibernate.annotations.Table;
+import org.hibernate.validator.constraints.NotBlank;
 
 
 
@@ -20,51 +19,54 @@ public class Campaign {
 	@javax.persistence.Id
 	@GeneratedValue
 	private Long campaignId;
-	private String userId;
+	@NotBlank
+	private Long tenantId;
+	private String status;
 	private String campaignTitle;
 	
 	@Column(length=1500)
 	private String campaignDescription;
 	private String blurb;
-	
-	@Lob @Basic(fetch = FetchType.LAZY)
-	@Column(columnDefinition = "LONGBLOB")
-	private byte[] imageBlob;
+	private String imageUrl;
+	private String videoUrl;
 	private String thumbnailUrl;
-	private Date createDate;
-	private Date suspendDate;
+	private Long createdBy;
+	private Date createdAt;
+	private Date lastUpdate;
 	private String category;
 	private String duration;
 	private String goal;
 	private String city;
 	private String country;
-	private String active;
+	
 
 	public Campaign() {
 		super();
 	}
 
-	public Campaign(Long campaignId, String userId, String campaignTitle, String campaignDescription, String blurb,
-			byte[] imageBlob, String thumbnailUrl, Date createDate, Date suspendDate, String category, String duration,
-			String goal, String city, String country, String active) {
+	
+	public Campaign(Long campaignId, Long tenantId, String status, String campaignTitle, String campaignDescription,
+			String blurb, String imageUrl, String videoUrl, String thumbnailUrl, Long createdBy, Date createdAt,
+			Date lastUpdate, String category, String duration, String goal, String city, String country) {
 		super();
 		this.campaignId = campaignId;
-		this.userId = userId;
+		this.tenantId = tenantId;
+		this.status = status;
 		this.campaignTitle = campaignTitle;
 		this.campaignDescription = campaignDescription;
 		this.blurb = blurb;
-		this.imageBlob = imageBlob;
+		this.imageUrl = imageUrl;
+		this.videoUrl = videoUrl;
 		this.thumbnailUrl = thumbnailUrl;
-		this.createDate = createDate;
-		this.suspendDate = suspendDate;
+		this.createdBy = createdBy;
+		this.createdAt = createdAt;
+		this.lastUpdate = lastUpdate;
 		this.category = category;
 		this.duration = duration;
 		this.goal = goal;
 		this.city = city;
 		this.country = country;
-		this.active = active;
 	}
-
 
 
 	public Long getCampaignId() {
@@ -75,13 +77,75 @@ public class Campaign {
 		this.campaignId = campaignId;
 	}
 
-	public String getUserId() {
-		return userId;
+	public Long getTenantId() {
+		return tenantId;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+
+	public void setTenantId(Long tenantId) {
+		this.tenantId = tenantId;
 	}
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+
+	public String getVideoUrl() {
+		return videoUrl;
+	}
+
+
+	public void setVideoUrl(String videoUrl) {
+		this.videoUrl = videoUrl;
+	}
+
+
+	public Long getCreatedBy() {
+		return createdBy;
+	}
+
+
+	public void setCreatedBy(Long createdBy) {
+		this.createdBy = createdBy;
+	}
+
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+
+
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
+
 
 	public String getCampaignTitle() {
 		return campaignTitle;
@@ -114,57 +178,12 @@ public class Campaign {
 		this.blurb = blurb;
 	}
 
-	/**
-	 * @return the imageBlob
-	 */
-	public byte[] getImageBlob() {
-		return imageBlob;
-	}
-
-	/**
-	 * @param imageBlob
-	 *            the imageBlob to set
-	 */
-	public void setImageBlob(byte[] imageBlob) {
-		this.imageBlob=imageBlob;
-	}
-
 	public String getThumbnailUrl() {
 		return thumbnailUrl;
 	}
 
 	public void setThumbnailUrl(String thumbnailUrl) {
 		this.thumbnailUrl = thumbnailUrl;
-	}
-
-	/**
-	 * @return the createDate
-	 */
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	/**
-	 * @param createDate
-	 *            the createDate to set
-	 */
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	/**
-	 * @return the suspendDate
-	 */
-	public Date getSuspendDate() {
-		return suspendDate;
-	}
-
-	/**
-	 * @param suspendDate
-	 *            the suspendDate to set
-	 */
-	public void setSuspendDate(Date suspendDate) {
-		this.suspendDate = suspendDate;
 	}
 
 	public String getCategory() {
@@ -207,12 +226,6 @@ public class Campaign {
 		this.country = country;
 	}
 
-	public String getActive() {
-		return active;
-	}
-
-	public void setActive(String active) {
-		this.active = active;
-	}
+	
 
 }
