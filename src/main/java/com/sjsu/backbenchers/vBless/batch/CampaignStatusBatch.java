@@ -37,26 +37,27 @@ public class CampaignStatusBatch{
 				
 				log.info("campaign today's date : " + todayDate);
 				
-				for (Campaign c : campaigns) {
-					if("Y".equals(c.getActive())) {
-						Calendar cal2 = Calendar.getInstance();
-						Date createDt = dateFormat.parse(dateFormat.format(c.getCreateDate()));
-						
-						cal2.setTime(createDt);
-						cal2.add(Calendar.DATE,Integer.parseInt(c.getDuration())); 
-						Date expDt = cal2.getTime();
-						
-						if((expDt.compareTo(todayDate)<=0)) {
-							c.setActive("N");
-							campaignRepository.save(c);
-							log.info("campaign start date : " + createDt);
-							log.info("campaign exp date : " + expDt);
-							log.info("send mail to the users of this campaign");
-							emailService.sendEmail(c.getCampaignId());
+				if(campaigns!=null && campaigns.size()>0) {
+					for (Campaign c : campaigns) {
+						if("active".equalsIgnoreCase(c.getStatus())) {
+							Calendar cal2 = Calendar.getInstance();
+							System.out.println("date=="+c.getCreatedAt()+"--------"+c.getCampaignTitle());
+							Date createDt = dateFormat.parse(dateFormat.format(c.getCreatedAt()==null? todayDate :c.getCreatedAt()));
+							
+							cal2.setTime(createDt);
+							cal2.add(Calendar.DATE,Integer.parseInt(c.getDuration())); 
+							Date expDt = cal2.getTime();
+							
+							if((expDt.compareTo(todayDate)<=0)) {
+								c.setStatus("Active");
+								campaignRepository.save(c);
+								log.info("campaign start date : " + createDt);
+								log.info("campaign exp date : " + expDt);
+								log.info("send mail to the users of this campaign");
+								emailService.sendEmail(c.getCampaignId());
+							}
 						}
 					}
-					
-					
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
