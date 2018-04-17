@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface CampaignRepository extends JpaRepository<Campaign, Long> {
 	List<Campaign> findByCampaignId(Long campaignId);
 	
-	@Query("SELECT c from Campaign c where c.active <>?")
-	List<Campaign> findActiveCampaigns(String active);
+	@Query("SELECT c from Campaign c where c.status =?")
+	List<Campaign> findActiveCampaigns(String status);
 }

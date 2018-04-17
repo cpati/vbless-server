@@ -3,7 +3,7 @@ package com.sjsu.backbenchers.vBless.controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import javax.servlet.annotation.MultipartConfig;
@@ -23,11 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sjsu.backbenchers.vBless.Constants;
 import com.sjsu.backbenchers.vBless.entity.Campaign;
 import com.sjsu.backbenchers.vBless.entity.CampaignRepository;
-import com.sjsu.backbenchers.vBless.entity.CampaignUserRepository;
 import com.sjsu.backbenchers.vBless.entity.FundDetails;
 import com.sjsu.backbenchers.vBless.entity.FundDetailsRepository;
+import com.sjsu.backbenchers.vBless.entity.UserRepository;
 
 @RestController
 @RequestMapping("/campaigns")
@@ -41,20 +42,20 @@ public class CampaignRestController {
 	private CampaignRepository campaignRepository;
 	
 	@Autowired
-	private CampaignUserRepository campaignUserRepository;
+	private UserRepository userRepository;
 
 	@Autowired
 	private FundDetailsRepository fundDetailsRepository;
 	
 	/* Get all Campaigns */
-	@RequestMapping(value="/",method=RequestMethod.GET)
-	public ResponseEntity<List<Campaign>> getCampaigns(){
+	@RequestMapping(value="/cam/{status}",method=RequestMethod.GET)
+	public ResponseEntity<List<Campaign>> getCampaigns(@PathVariable String status){
 		log.debug("getCampaigns");
 		System.out.println("chida getCampaigns");
-		List<Campaign> campaigns=campaignRepository.findActiveCampaigns("N");
+		List<Campaign> campaigns=campaignRepository.findActiveCampaigns(status);
 		for (Campaign campaign : campaigns) {
 			if (campaign.getUserId() != null) {
-				campaign.setUserId(campaignUserRepository.findByUserId(campaign.getUserId()).getFullName());
+				campaign.setUserId(userRepository.findByUserId(campaign.getUserId()).getUserId());
 			}
 		}
 		return new ResponseEntity<List<Campaign>>(campaigns,org.springframework.http.HttpStatus.OK);
@@ -66,7 +67,7 @@ public class CampaignRestController {
 		log.debug("getCampaignById");
 		Campaign campaign=campaignRepository.findByCampaignId(campaignId).get(0);
 		if (campaign.getUserId() != null) {
-			campaign.setUserId(campaignUserRepository.findByUserId(campaign.getUserId()).getFullName());
+			campaign.setUserId(userRepository.findByUserId(campaign.getUserId()).getUserId());
 		}
 		return new ResponseEntity<Campaign>(campaign,org.springframework.http.HttpStatus.OK);
 	}
@@ -76,7 +77,7 @@ public class CampaignRestController {
 	public ResponseEntity<Campaign> createCampaign(@RequestBody Campaign campaign){
 		log.debug("createCampaign");
 		System.out.println("createCampaign");
-		campaign.setActive("Y");
+		campaign.setStatus(Constants.Campaign.Status.ACTIVE);
 		Campaign newCampaign=campaignRepository.save(campaign);
 		return new ResponseEntity<Campaign>(newCampaign,HttpStatus.CREATED);
 	}
@@ -85,15 +86,17 @@ public class CampaignRestController {
 	@RequestMapping(value="/addFundDetails",method=RequestMethod.POST)
 	public ResponseEntity<FundDetails> addFundDetails(@RequestParam(value="amount_paid", required=true) String amountPaid,
 			@RequestParam(value="campaign_id", required=true) Long campaignId,
-			@RequestParam(value="user_id", required=false) String userId){
+			@RequestParam(value="user_id", required=false) Long userId){
 		log.debug("addFundDetails");
 		FundDetails fd = new FundDetails();
 		fd.setAmountPaid(amountPaid);
 		fd.setCampaignId(campaignId);
 		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");		
-		String todayDate = dateFormat.format(new Date());		
-		fd.setPaymentDate(todayDate);
+		//SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");		
+		//String todayDate = dateFormat.format(new Date());
+		java.util.Date todaydate= new java.util.Date();
+		java.sql.Date sqlDate = new java.sql.Date(todaydate.getTime());
+		fd.setPaidAt(sqlDate);
 		
 		fd.setUserId(userId);
 		
@@ -110,7 +113,7 @@ public class CampaignRestController {
 		try {
 			fileInputStream =  (FileInputStream) fileUpload.getInputStream();
 			campaign=campaignRepository.findByCampaignId(campaignId).get(0);
-			campaign.setImageBlob(IOUtils.toByteArray(fileInputStream));
+			//campaign.setImageUrl(IOUtils.toByteArray(fileInputStream));//to-do; this code will be change for upload image n make url for it
 			campaignRepository.save(campaign);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -132,7 +135,6 @@ public class CampaignRestController {
 	public ResponseEntity<Campaign> updateCampaignStatus(@RequestParam Long campaignId){
 		log.debug("updateCampaignStatus.... " + campaignId);
 		Campaign campaign = campaignRepository.findOne(campaignId);
-		campaign.setActive("N");
 		Campaign updatedCampaign=campaignRepository.save(campaign);
 		return new ResponseEntity<Campaign>(updatedCampaign,HttpStatus.OK);
 	}

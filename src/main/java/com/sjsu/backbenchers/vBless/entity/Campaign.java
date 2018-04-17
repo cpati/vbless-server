@@ -1,6 +1,6 @@
 package com.sjsu.backbenchers.vBless.entity;
 
-import java.sql.Date;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,8 +19,12 @@ public class Campaign {
 	@javax.persistence.Id
 	@GeneratedValue
 	private Long campaignId;
-	@NotBlank
+	
 	private Long tenantId;
+	
+	private Long userId;
+	
+
 	private String status;
 	private String campaignTitle;
 	
@@ -38,6 +42,7 @@ public class Campaign {
 	private String goal;
 	private String city;
 	private String country;
+	
 	
 
 	public Campaign() {
@@ -225,6 +230,22 @@ public class Campaign {
 	public void setCountry(String country) {
 		this.country = country;
 	}
+
+
+	public Object getActive() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public Long getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
 
 	
 

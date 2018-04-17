@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 
 import com.sjsu.backbenchers.vBless.entity.Campaign;
 import com.sjsu.backbenchers.vBless.entity.CampaignRepository;
-import com.sjsu.backbenchers.vBless.entity.CampaignUser;
-import com.sjsu.backbenchers.vBless.entity.CampaignUserRepository;
 import com.sjsu.backbenchers.vBless.entity.FundDetails;
 import com.sjsu.backbenchers.vBless.entity.FundDetailsRepository;
+import com.sjsu.backbenchers.vBless.entity.User;
+import com.sjsu.backbenchers.vBless.entity.UserRepository;
 
 @Service
 public class EmailService {
@@ -38,7 +38,7 @@ public class EmailService {
 	private FundDetailsRepository fundDetailsRep;
 	
 	@Autowired
-	private CampaignUserRepository campaignUserRepo;
+	private UserRepository userRepo;
 	
 	@Autowired
 	private CampaignRepository campaignRepository;
@@ -57,7 +57,7 @@ public class EmailService {
 			Long fundCollected = fundDetailsRep.findTotalFundRaised(campaignId);
 
 			for (FundDetails fd : fundDetails) {
-				CampaignUser cu = campaignUserRepo.findByUserId(fd.getUserId());
+				User cu = userRepo.findByUserId(fd.getUserId());
 
 				System.out.println("TLSEmail Start");
 				Properties props = new Properties();
