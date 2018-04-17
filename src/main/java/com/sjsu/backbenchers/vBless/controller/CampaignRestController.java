@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sjsu.backbenchers.vBless.Constants;
 import com.sjsu.backbenchers.vBless.entity.Campaign;
 import com.sjsu.backbenchers.vBless.entity.CampaignRepository;
 import com.sjsu.backbenchers.vBless.entity.FundDetails;
@@ -76,7 +77,7 @@ public class CampaignRestController {
 	public ResponseEntity<Campaign> createCampaign(@RequestBody Campaign campaign){
 		log.debug("createCampaign");
 		System.out.println("createCampaign");
-		campaign.setStatus("active");
+		campaign.setStatus(Constants.Campaign.Status.ACTIVE);
 		Campaign newCampaign=campaignRepository.save(campaign);
 		return new ResponseEntity<Campaign>(newCampaign,HttpStatus.CREATED);
 	}
@@ -134,7 +135,6 @@ public class CampaignRestController {
 	public ResponseEntity<Campaign> updateCampaignStatus(@RequestParam Long campaignId){
 		log.debug("updateCampaignStatus.... " + campaignId);
 		Campaign campaign = campaignRepository.findOne(campaignId);
-		//campaign.setActive("N");
 		Campaign updatedCampaign=campaignRepository.save(campaign);
 		return new ResponseEntity<Campaign>(updatedCampaign,HttpStatus.OK);
 	}

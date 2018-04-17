@@ -37,7 +37,7 @@ public class CampaignStatusBatch{
 				
 				log.info("campaign today's date : " + todayDate);
 				
-				if(campaigns!=null && campaigns.size()>0) {
+				if(!campaigns.isEmpty()) {
 					for (Campaign c : campaigns) {
 						if("active".equalsIgnoreCase(c.getStatus())) {
 							Calendar cal2 = Calendar.getInstance();

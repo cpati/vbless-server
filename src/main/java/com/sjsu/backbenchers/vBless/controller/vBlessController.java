@@ -54,10 +54,10 @@ public class vBlessController {
 			@RequestParam(value="paymentinfo", required=true) String paymentinfo,
 			@RequestParam(value="tenantId", required=true) Long tenantId,
 			@RequestParam(value="role", required=true) String role,
-			@RequestParam(value="role", required=true) String status,
-			@RequestParam(value="role", required=true) Long createdBy,
-			@RequestParam(value="role", required=true) Date createdAt,
-			@RequestParam(value="role", required=true) Date lastUpdate
+			@RequestParam(value="status", required=true) String status,
+			@RequestParam(value="createdBy", required=true) Long createdBy,
+			@RequestParam(value="createdAt", required=true) Date createdAt,
+			@RequestParam(value="lastUpdate", required=true) Date lastUpdate
 			) {
 		log.info("Inside updateCampaignUser Method. Updating  User Details for User: "+ userId );
 		User campaignUser = new User(userId,tenantId, firstname, lastname,role , email, phone, paymentinfo,status,createdBy,createdAt,lastUpdate);
