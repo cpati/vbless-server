@@ -10,7 +10,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableScheduling
+//@EnableScheduling
 //@EnableOAuth2Sso
 public class App extends SpringBootServletInitializer 
 {
