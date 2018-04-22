@@ -31,7 +31,9 @@ public class Campaign {
 	@Column(length=1500)
 	private String campaignDescription;
 	private String blurb;
-	private String imageUrl;
+	@Lob @Basic(fetch = FetchType.LAZY)
+	@Column(columnDefinition = "LONGBLOB")
+	private byte[] imageBlob;
 	private String videoUrl;
 	private String thumbnailUrl;
 	private Long createdBy;
@@ -50,17 +52,22 @@ public class Campaign {
 	}
 
 	
-	public Campaign(Long campaignId, Long tenantId, String status, String campaignTitle, String campaignDescription,
-			String blurb, String imageUrl, String videoUrl, String thumbnailUrl, Long createdBy, Date createdAt,
-			Date lastUpdate, String category, String duration, String goal, String city, String country) {
+	
+
+
+	public Campaign(Long campaignId, Long tenantId, Long userId, String status, String campaignTitle,
+			String campaignDescription, String blurb, byte[] imageBlob, String videoUrl, String thumbnailUrl,
+			Long createdBy, Date createdAt, Date lastUpdate, String category, String duration, String goal, String city,
+			String country) {
 		super();
 		this.campaignId = campaignId;
 		this.tenantId = tenantId;
+		this.userId = userId;
 		this.status = status;
 		this.campaignTitle = campaignTitle;
 		this.campaignDescription = campaignDescription;
 		this.blurb = blurb;
-		this.imageUrl = imageUrl;
+		this.imageBlob = imageBlob;
 		this.videoUrl = videoUrl;
 		this.thumbnailUrl = thumbnailUrl;
 		this.createdBy = createdBy;
@@ -72,6 +79,9 @@ public class Campaign {
 		this.city = city;
 		this.country = country;
 	}
+
+
+
 
 
 	public Long getCampaignId() {
@@ -102,14 +112,18 @@ public class Campaign {
 	}
 
 
-	public String getImageUrl() {
-		return imageUrl;
+
+	public byte[] getImageBlob() {
+		return imageBlob;
 	}
 
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setImageBlob(byte[] imageBlob) {
+		this.imageBlob = imageBlob;
 	}
+
+
+
 
 
 	public String getVideoUrl() {
