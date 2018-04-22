@@ -1,14 +1,11 @@
 package com.sjsu.backbenchers.vBless;
 
-public interface Constants {
-
-	
-	public interface Campaign{
-		public interface Status{
-			String ACTIVE="A";
-			String SUSPENDED="S";
-			String CANCELLED="C";
+public final class Constant {
+		
+			public static final String ACTIVE="Active";
+			public static final String  SUSPENDED="Suspended";
+			public static final String  CANCELLED="Cancelled";
 			
-		}
-	}
+		
+	
 }
