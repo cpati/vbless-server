@@ -22,8 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.sjsu.backbenchers.vBless.Constants;
+import com.sjsu.backbenchers.vBless.Constant;
 import com.sjsu.backbenchers.vBless.entity.Campaign;
 import com.sjsu.backbenchers.vBless.entity.CampaignRepository;
 import com.sjsu.backbenchers.vBless.entity.FundDetails;
@@ -31,9 +30,10 @@ import com.sjsu.backbenchers.vBless.entity.FundDetailsRepository;
 import com.sjsu.backbenchers.vBless.entity.UserRepository;
 
 @RestController
-@RequestMapping("/campaigns")
+@RequestMapping("/{tenantId}/campaigns")
 @MultipartConfig(fileSizeThreshold = 20971520)
-@CrossOrigin(origins = {"http://docker.for.mac.localhost:8080","http://localhost:8080"})
+@CrossOrigin(origins = {"http://localhost:8080"})
+
 public class CampaignRestController {
 
 	private static final Logger log = LoggerFactory.getLogger(CampaignRestController.class);
@@ -47,12 +47,12 @@ public class CampaignRestController {
 	@Autowired
 	private FundDetailsRepository fundDetailsRepository;
 	
-	/* Get all Campaigns */
-	@RequestMapping(value="/cam/{status}",method=RequestMethod.GET)
-	public ResponseEntity<List<Campaign>> getCampaigns(@PathVariable String status){
+	/* Get all Active Campaigns */
+	@RequestMapping(value="/",method=RequestMethod.GET)
+	public ResponseEntity<List<Campaign>> getCampaigns(@PathVariable long tenantId){
 		log.debug("getCampaigns");
 		System.out.println("chida getCampaigns");
-		List<Campaign> campaigns=campaignRepository.findActiveCampaigns(status);
+		List<Campaign> campaigns=campaignRepository.findActiveCampaigns(Constant.ACTIVE,tenantId);
 		for (Campaign campaign : campaigns) {
 			if (campaign.getUserId() != null) {
 				campaign.setUserId(userRepository.findByUserId(campaign.getUserId()).getUserId());
@@ -61,6 +61,22 @@ public class CampaignRestController {
 		return new ResponseEntity<List<Campaign>>(campaigns,org.springframework.http.HttpStatus.OK);
 	}
 	
+//	/* Get all Campaigns */
+//	@RequestMapping(value="/cam/{status}",method=RequestMethod.GET)
+//	public ResponseEntity<List<Campaign>> getCampaigns(@PathVariable String status){
+//		log.debug("getCampaigns");
+//		System.out.println("chida getCampaigns");
+//		List<Campaign> campaigns=campaignRepository.findActiveCampaigns(status);
+//		for (Campaign campaign : campaigns) {
+//			if (campaign.getUserId() != null) {
+//				campaign.setUserId(userRepository.findByUserId(campaign.getUserId()).getUserId());
+//			}
+//		}
+//		return new ResponseEntity<List<Campaign>>(campaigns,org.springframework.http.HttpStatus.OK);
+//	}
+	
+	
+
 	/* Get Campaign by Id */
 	@RequestMapping(value="/{campaignId}",method=RequestMethod.GET)
 	public ResponseEntity<Campaign> getCampaignById(@PathVariable Long campaignId){
@@ -71,16 +87,17 @@ public class CampaignRestController {
 		}
 		return new ResponseEntity<Campaign>(campaign,org.springframework.http.HttpStatus.OK);
 	}
-	
+	 
 	/* Create a campaign */
 	@RequestMapping(value="/",method=RequestMethod.POST)
-	public ResponseEntity<Campaign> createCampaign(@RequestBody Campaign campaign){
+	public ResponseEntity<Campaign> createCampaign(@PathVariable long tenantId, @RequestBody Campaign campaign){  
 		log.debug("createCampaign");
-		System.out.println("createCampaign");
-		campaign.setStatus(Constants.Campaign.Status.ACTIVE);
+		campaign.setStatus(Constant.ACTIVE);
+		campaign.setTenantId(tenantId);
 		Campaign newCampaign=campaignRepository.save(campaign);
 		return new ResponseEntity<Campaign>(newCampaign,HttpStatus.CREATED);
 	}
+	
 	
 	/* Add Fund Details for a Campaign*/
 	@RequestMapping(value="/addFundDetails",method=RequestMethod.POST)
@@ -103,7 +120,7 @@ public class CampaignRestController {
 		fundDetailsRepository.save(fd);
 		return new ResponseEntity<FundDetails>(fd,HttpStatus.OK);
 	}
-	
+	 
 	/* Upload File to a campaign */
 	@RequestMapping(value="/uploadfile/{campaignId}",method=RequestMethod.POST)
 	public ResponseEntity<Campaign> uploadFile(@PathVariable Long campaignId,@RequestParam("fileUpload") MultipartFile fileUpload){
@@ -113,7 +130,8 @@ public class CampaignRestController {
 		try {
 			fileInputStream =  (FileInputStream) fileUpload.getInputStream();
 			campaign=campaignRepository.findByCampaignId(campaignId).get(0);
-			//campaign.setImageUrl(IOUtils.toByteArray(fileInputStream));//to-do; this code will be change for upload image n make url for it
+			campaign.setImageBlob(IOUtils.toByteArray(fileInputStream));//to-do; this code will be change for upload image n make url for it
+		
 			campaignRepository.save(campaign);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
