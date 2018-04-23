@@ -28,6 +28,8 @@ import com.sjsu.backbenchers.vBless.entity.CampaignRepository;
 import com.sjsu.backbenchers.vBless.entity.FundDetails;
 import com.sjsu.backbenchers.vBless.entity.FundDetailsRepository;
 import com.sjsu.backbenchers.vBless.entity.UserRepository;
+import com.sjsu.backbenchers.vBless.model.FileDetail;
+import com.sjsu.backbenchers.vBless.service.FileUploadServiceImp;
 
 @RestController
 @RequestMapping("/{tenantId}/campaigns/")
@@ -46,6 +48,9 @@ public class CampaignRestController {
 
 	@Autowired
 	private FundDetailsRepository fundDetailsRepository;
+	
+	@Autowired
+	private FileUploadServiceImp fileUploadServiceImp;
 	
 	/* Get all Active Campaigns */
 	@RequestMapping(value="/",method=RequestMethod.GET)
@@ -129,9 +134,12 @@ public class CampaignRestController {
 		Campaign campaign=null;
 		try {
 			fileInputStream =  (FileInputStream) fileUpload.getInputStream();
+			System.out.println("file upload called...");
+			fileUploadServiceImp.uploadFile(fileUpload.getOriginalFilename(), fileInputStream);
 			campaign=campaignRepository.findByCampaignId(campaignId).get(0);
-			campaign.setImageBlob(IOUtils.toByteArray(fileInputStream));//to-do; this code will be change for upload image n make url for it
+			//campaign.setImageBlob(IOUtils.toByteArray(fileInputStream));//to-do; this code will be change for upload image n make url for it
 		
+			
 			campaignRepository.save(campaign);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

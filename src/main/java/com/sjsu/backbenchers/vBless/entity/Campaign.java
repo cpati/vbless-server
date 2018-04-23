@@ -31,9 +31,9 @@ public class Campaign {
 	@Column(length=1500)
 	private String campaignDescription;
 	private String blurb;
-	@Lob @Basic(fetch = FetchType.LAZY)
+	/*@Lob @Basic(fetch = FetchType.LAZY)
 	@Column(columnDefinition = "LONGBLOB")
-	private byte[] imageBlob;
+	private byte[] imageBlob;*/
 	private String videoUrl;
 	private String thumbnailUrl;
 	private Long createdBy;
@@ -67,7 +67,7 @@ public class Campaign {
 		this.campaignTitle = campaignTitle;
 		this.campaignDescription = campaignDescription;
 		this.blurb = blurb;
-		this.imageBlob = imageBlob;
+		//this.imageBlob = imageBlob;
 		this.videoUrl = videoUrl;
 		this.thumbnailUrl = thumbnailUrl;
 		this.createdBy = createdBy;
@@ -112,7 +112,7 @@ public class Campaign {
 	}
 
 
-
+/*
 	public byte[] getImageBlob() {
 		return imageBlob;
 	}
@@ -121,7 +121,7 @@ public class Campaign {
 	public void setImageBlob(byte[] imageBlob) {
 		this.imageBlob = imageBlob;
 	}
-
+*/
 
 
 
