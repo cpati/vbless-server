@@ -153,6 +153,7 @@ public class CampaignRestController {
 	public ResponseEntity<Campaign> updateCampaignStatus(@RequestParam Long campaignId){
 		log.debug("updateCampaignStatus.... " + campaignId);
 		Campaign campaign = campaignRepository.findOne(campaignId);
+		campaign.setStatus(Constant.SUSPENDED);
 		Campaign updatedCampaign=campaignRepository.save(campaign);
 		return new ResponseEntity<Campaign>(updatedCampaign,HttpStatus.OK);
 	}
