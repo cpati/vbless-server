@@ -30,7 +30,7 @@ import com.sjsu.backbenchers.vBless.entity.FundDetailsRepository;
 import com.sjsu.backbenchers.vBless.entity.UserRepository;
 
 @RestController
-@RequestMapping("/{tenantId}/campaigns")
+@RequestMapping("/{tenantId}/campaigns/")
 @MultipartConfig(fileSizeThreshold = 20971520)
 @CrossOrigin(origins = {"http://localhost:8080"})
 
