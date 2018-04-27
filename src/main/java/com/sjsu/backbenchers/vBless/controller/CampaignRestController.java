@@ -62,6 +62,7 @@ public class CampaignRestController {
 			if (campaign.getUserId() != null) {
 				campaign.setUserId(userRepository.findByUserId(campaign.getUserId()).getUserId());
 			}
+			campaign.setImageBlob(fileUploadServiceImp.downloadFile(campaign.getCampaignImageUrl()));
 		}
 		return new ResponseEntity<List<Campaign>>(campaigns,org.springframework.http.HttpStatus.OK);
 	}
@@ -90,6 +91,7 @@ public class CampaignRestController {
 		if (campaign.getUserId() != null) {
 			campaign.setUserId(userRepository.findByUserId(campaign.getUserId()).getUserId());
 		}
+		campaign.setImageBlob(fileUploadServiceImp.downloadFile(campaign.getCampaignImageUrl()));
 		return new ResponseEntity<Campaign>(campaign,org.springframework.http.HttpStatus.OK);
 	}
 	 
@@ -134,11 +136,14 @@ public class CampaignRestController {
 		Campaign campaign=null;
 		try {
 			fileInputStream =  (FileInputStream) fileUpload.getInputStream();
-			System.out.println("file upload called...");
-			fileUploadServiceImp.uploadFile(fileUpload.getOriginalFilename(), fileInputStream);
-			campaign=campaignRepository.findByCampaignId(campaignId).get(0);
-			//campaign.setImageBlob(IOUtils.toByteArray(fileInputStream));//to-do; this code will be change for upload image n make url for it
 		
+			campaign=campaignRepository.findByCampaignId(campaignId).get(0);
+			
+			//TODO : Code will fail if image doesn't have an extension
+			campaign.setCampaignImageUrl(campaignId+ "." + fileUpload.getOriginalFilename());
+			campaign.setImageBlob(fileUpload.getBytes());
+			System.out.println("file upload called...");
+			fileUploadServiceImp.uploadFile(campaign.getCampaignImageUrl(), fileInputStream);
 			
 			campaignRepository.save(campaign);
 		} catch (IOException e) {

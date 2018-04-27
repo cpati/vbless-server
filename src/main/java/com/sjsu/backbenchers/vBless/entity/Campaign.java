@@ -7,9 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Lob;
-import org.hibernate.annotations.Table;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.persistence.Transient;
 
+import org.hibernate.annotations.Table;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 
 @Entity
@@ -31,9 +33,15 @@ public class Campaign {
 	@Column(length=1500)
 	private String campaignDescription;
 	private String blurb;
-	/*@Lob @Basic(fetch = FetchType.LAZY)
-	@Column(columnDefinition = "LONGBLOB")
-	private byte[] imageBlob;*/
+	
+	@JsonInclude()
+	@Transient
+	private byte[] imageBlob;
+	
+	
+	private String campaignImageUrl;
+	
+
 	private String videoUrl;
 	private String thumbnailUrl;
 	private Long createdBy;
@@ -55,30 +63,23 @@ public class Campaign {
 	
 
 
-	public Campaign(Long campaignId, Long tenantId, Long userId, String status, String campaignTitle,
-			String campaignDescription, String blurb, byte[] imageBlob, String videoUrl, String thumbnailUrl,
-			Long createdBy, Date createdAt, Date lastUpdate, String category, String duration, String goal, String city,
-			String country) {
-		super();
-		this.campaignId = campaignId;
-		this.tenantId = tenantId;
-		this.userId = userId;
-		this.status = status;
-		this.campaignTitle = campaignTitle;
-		this.campaignDescription = campaignDescription;
-		this.blurb = blurb;
-		//this.imageBlob = imageBlob;
-		this.videoUrl = videoUrl;
-		this.thumbnailUrl = thumbnailUrl;
-		this.createdBy = createdBy;
-		this.createdAt = createdAt;
-		this.lastUpdate = lastUpdate;
-		this.category = category;
-		this.duration = duration;
-		this.goal = goal;
-		this.city = city;
-		this.country = country;
+	
+
+
+
+	@Override
+	public String toString() {
+		return "Campaign [campaignId=" + campaignId + ", tenantId=" + tenantId + ", userId=" + userId + ", status="
+				+ status + ", campaignTitle=" + campaignTitle + ", campaignDescription=" + campaignDescription
+				+ ", blurb=" + blurb + ", campaignImageUrl=" + campaignImageUrl + ", videoUrl=" + videoUrl
+				+ ", thumbnailUrl=" + thumbnailUrl + ", createdBy=" + createdBy + ", createdAt=" + createdAt
+				+ ", lastUpdate=" + lastUpdate + ", category=" + category + ", duration=" + duration + ", goal=" + goal
+				+ ", city=" + city + ", country=" + country + "]";
 	}
+
+
+
+
 
 
 
@@ -110,21 +111,6 @@ public class Campaign {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-
-/*
-	public byte[] getImageBlob() {
-		return imageBlob;
-	}
-
-
-	public void setImageBlob(byte[] imageBlob) {
-		this.imageBlob = imageBlob;
-	}
-*/
-
-
-
 
 	public String getVideoUrl() {
 		return videoUrl;
@@ -260,7 +246,22 @@ public class Campaign {
 		this.userId = userId;
 	}
 
+	public String getCampaignImageUrl() {
+		return campaignImageUrl;
+	}
+
+	public void setCampaignImageUrl(String campaignImageUrl) {
+		this.campaignImageUrl = campaignImageUrl;
+	}
 
 	
+	public byte[] getImageBlob() {		
+		return imageBlob;
+	}
+
+	public void setImageBlob(byte[] imageBlob) {
+		this.imageBlob = imageBlob;
+	}
+
 
 }
