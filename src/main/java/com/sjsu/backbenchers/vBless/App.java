@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @SpringBootApplication
-//@EnableScheduling
+@EnableScheduling
 //@EnableOAuth2Sso
 @EnableResourceServer
 public class App extends SpringBootServletInitializer 
