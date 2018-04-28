@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     parameters {
-        string(name: 'app', defaultValue: 'vblessimg/vbless', description: 'vbless docker image')
+        string(name: 'app', defaultValue: 'vbless-server', description: 'vbless docker image')
     }
 
     stages {
@@ -11,8 +11,8 @@ pipeline {
             		sh '''
                  /opt/maven/bin/mvn package dockerfile:build -DskipTests;
                  docker login --username=$dockeruserid --password=$dockeruserpw
-                 docker tag vbless-service chidanandapati/vbless-server:v2;
-                 docker push chidanandapati/vbless-service:v2;
+                 docker tag vbless-service chidanandapati/vbless-server:v3;
+                 docker push chidanandapati/vbless-service:v3;
                  '''
             }
         }
