@@ -31,6 +31,7 @@ import com.sjsu.backbenchers.vBless.service.FileUploadServiceImp;
 @RestController
 @RequestMapping("/vBless/")
 @CrossOrigin(origins = {"http://docker.for.mac.localhost:8080","http://localhost:8080"})
+@EnableOAuth2Sso
 public class vBlessController {
 	
 	private static final Logger log = LoggerFactory.getLogger(CampaignRestController.class);

@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.servlet.annotation.MultipartConfig;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,7 @@ import com.sjsu.backbenchers.vBless.service.FileUploadServiceImp;
 @RequestMapping("/{tenantId}/campaigns/")
 @MultipartConfig(fileSizeThreshold = 20971520)
 @CrossOrigin(origins = {"http://localhost:8080"})
+@EnableOAuth2Sso
 public class CampaignRestController {
 
 	private static final Logger log = LoggerFactory.getLogger(CampaignRestController.class);
