@@ -10,6 +10,9 @@ pipeline {
             steps {
             		sh '''
                  mvn package dockerfile:build -DskipTests;
+                 docker login --username=$dockeruserid --password=$dockeruserpw
+                 docker tag vbless-ui chidanandapati/vbless-server:v1;
+                 docker push chidanandapati/vbless-ui:v1;
                  '''
             }
         }
@@ -23,15 +26,10 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                dockerProcess=`docker ps|grep "5051.*8080"|awk \'{print $1}\'`;
-                echo $dockerProcess
-				if [ -n "$dockerProcess" ]
-				then
-					docker stop $dockerProcess	
-					echo "docker process "$dockerProcess" stopped"
-				fi
-				echo "docker run -d -p 5051:8080 -t vblessimg/vbless"
-				/Users/chidanandapati/spring/vbless.sh
+                export KUBERNETES_MASTER=http://127.0.0.1:8001
+                kubectl apply -f server-deployment.yaml
+                kubectl apply -f server-service.yaml
+                kubectl rollout status deployment/vbless-server 
                 '''
             }
         }
