@@ -18,7 +18,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.cors();
+        http.authorizeRequests().antMatchers("/login").permitAll();
     }
+  
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

@@ -45,7 +45,7 @@ public class Campaign {
 	private String videoUrl;
 	private String thumbnailUrl;
 	private Long createdBy;
-	private Date createdAt;
+	private Date createDate;
 	private Date lastUpdate;
 	private String category;
 	private String duration;
@@ -72,7 +72,7 @@ public class Campaign {
 		return "Campaign [campaignId=" + campaignId + ", tenantId=" + tenantId + ", userId=" + userId + ", status="
 				+ status + ", campaignTitle=" + campaignTitle + ", campaignDescription=" + campaignDescription
 				+ ", blurb=" + blurb + ", campaignImageUrl=" + campaignImageUrl + ", videoUrl=" + videoUrl
-				+ ", thumbnailUrl=" + thumbnailUrl + ", createdBy=" + createdBy + ", createdAt=" + createdAt
+				+ ", thumbnailUrl=" + thumbnailUrl + ", createdBy=" + createdBy + ", createDate=" + createDate
 				+ ", lastUpdate=" + lastUpdate + ", category=" + category + ", duration=" + duration + ", goal=" + goal
 				+ ", city=" + city + ", country=" + country + "]";
 	}
@@ -132,13 +132,13 @@ public class Campaign {
 	}
 
 
-	public Date getCreatedAt() {
-		return createdAt;
+	public Date getCreateDate() {
+		return createDate;
 	}
 
 
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
 
@@ -232,11 +232,6 @@ public class Campaign {
 	}
 
 
-	public Object getActive() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	public Long getUserId() {
 		return userId;
 	}

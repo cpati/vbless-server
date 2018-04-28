@@ -30,6 +30,8 @@ public class Tenant{
 	private Date createdAt;
 	private Date lastUpdate;
 	
+	private String loginRedirectURL;
+	
 	public Tenant() {
 		super();
 		
@@ -140,6 +142,14 @@ public class Tenant{
 	}
 	
 	
-	
+	public String getLoginRedirectURL() {
+		return loginRedirectURL;
+	}
+
+	public void setLoginRedirectURL(String loginRedirectURL) {
+		this.loginRedirectURL = loginRedirectURL;
+	}
+
+
 
 }
