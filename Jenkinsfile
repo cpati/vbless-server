@@ -19,7 +19,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                mvn test
+                /opt/maven/bin/mvn test
                 '''
             }
         }
