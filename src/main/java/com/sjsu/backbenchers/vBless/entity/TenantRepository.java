@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface TenantRepository  extends JpaRepository<Tenant, Long> {
 	List<Tenant> findByTenantId(Long tenantId);
 	
+	List<Tenant> findByBrandName(String brandName);
+	
 }

@@ -112,6 +112,16 @@ public class vBlessController {
 		return new ResponseEntity<Tenant>(tenant,org.springframework.http.HttpStatus.OK);
 	}
 	
+	/* Get Tenant by Id */
+	@RequestMapping(value="/getTenantByBrandName/{brandName}",method=RequestMethod.GET)
+	public ResponseEntity<Tenant> getTenantByBrandName(@PathVariable String brandName){
+		log.debug("getTenantById");
+		Tenant tenant=tenantRepository.findByBrandName(brandName).get(0);
+		
+		return new ResponseEntity<Tenant>(tenant,org.springframework.http.HttpStatus.OK);
+	}
+	
+	
 	/* Create a tenant */
 	@RequestMapping(value="/createTenant",method=RequestMethod.POST)
 	public ResponseEntity<Tenant> createTenant(@RequestBody Tenant tenant){  
