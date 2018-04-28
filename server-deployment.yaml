@@ -94,6 +94,7 @@ spec:
             secretKeyRef:
               name: vbless-secret
               key: okta_oauth2_clientsecret                  
-        image: chidanandapati/vbless-server:v1
+        image: chidanandapati/vbless-server:v2
+        imagePullPolicy: Always
         ports:
         - containerPort: 5051
