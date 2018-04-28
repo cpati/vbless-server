@@ -9,7 +9,7 @@ pipeline {
         stage('Build') {
             steps {
             		sh '''
-                 mvn package dockerfile:build -DskipTests;
+                 /opt/maven/bin/mvn package dockerfile:build -DskipTests;
                  docker login --username=$dockeruserid --password=$dockeruserpw
                  docker tag vbless-ui chidanandapati/vbless-server:v1;
                  docker push chidanandapati/vbless-ui:v1;
