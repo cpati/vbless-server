@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.rekognition.AmazonRekognition;
@@ -35,9 +36,13 @@ public class CheckImageService {
 		
 	@Value("${s3.bucket}")
 	private String bucket;
+	
+	@Value("${aws.access_key_id}")
+	private String awsAccessKeyId;
+	
 
-	@Autowired
-	private FundDetailsRepository fundDetailsRep;
+	@Value("${aws.secret_access_key}")
+	private String awsSecretKey;
 	
 	@Autowired
 	private CampaignRepository campaignRepository;
@@ -51,7 +56,7 @@ public class CheckImageService {
 			
 	        AWSCredentials credentials;
 	        try {
-	            credentials = new ProfileCredentialsProvider("default").getCredentials();
+	            credentials = new BasicAWSCredentials(awsAccessKeyId, awsSecretKey);
 	        } catch(Exception e) {
 	           throw new AmazonClientException("Cannot load the credentials from the credential profiles file. "
 	            + "Please make sure that your credentials file is at the correct "
