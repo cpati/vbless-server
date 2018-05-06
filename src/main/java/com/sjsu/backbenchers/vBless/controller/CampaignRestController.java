@@ -29,6 +29,7 @@ import com.sjsu.backbenchers.vBless.entity.FundDetails;
 import com.sjsu.backbenchers.vBless.entity.FundDetailsRepository;
 import com.sjsu.backbenchers.vBless.entity.UserRepository;
 import com.sjsu.backbenchers.vBless.model.FileDetail;
+import com.sjsu.backbenchers.vBless.service.CheckImageService;
 import com.sjsu.backbenchers.vBless.service.FileUploadServiceImp;
 
 @RestController
@@ -51,6 +52,9 @@ public class CampaignRestController {
 	
 	@Autowired
 	private FileUploadServiceImp fileUploadServiceImp;
+
+	@Autowired
+	private CheckImageService checkImageService;
 	
 	/* Get all Active Campaigns */
 	@RequestMapping(value="/",method=RequestMethod.GET)
@@ -144,7 +148,12 @@ public class CampaignRestController {
 			campaign.setImageBlob(fileUpload.getBytes());
 			System.out.println("file upload called...");
 			fileUploadServiceImp.uploadFile(campaign.getCampaignImageUrl(), fileInputStream);
-			
+
+			//Check if the image has any prohibited elements using AWS Image Rekognition
+			boolean flagImage = checkImageService.flagImage(campaignId, fileUpload.getOriginalFilename());
+			if (flagImage) {
+				campaign.setStatus("Inappropriate");
+			}
 			campaignRepository.save(campaign);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
