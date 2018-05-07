@@ -44,16 +44,11 @@ public class CheckImageService {
 	@Value("${aws.secret_access_key}")
 	private String awsSecretKey;
 	
-	@Autowired
-	private CampaignRepository campaignRepository;
 	
 	public boolean flagImage(Long campaignId, String photo){
 		boolean suspendCampaign = false;
 		
-		try {
-			// fetch campaign details
-			Campaign campaign = campaignRepository.findByCampaignId(campaignId).get(0);
-			
+		try {			
 	        AWSCredentials credentials;
 	        try {
 	            credentials = new BasicAWSCredentials(awsAccessKeyId, awsSecretKey);
@@ -85,7 +80,9 @@ public class CheckImageService {
         	  String lbl = label.getName();
         	  
               System.out.println(lbl + ": " + conf);
-              if (lbl.contentEquals("Gun") && conf > 90.0) {
+              if (lbl.contentEquals("Gun") && conf > 90.0 ||
+            		  lbl.contentEquals("Weapon") && conf > 90.0
+            		  ) {
             	  suspendCampaign = true;  
               }
            }

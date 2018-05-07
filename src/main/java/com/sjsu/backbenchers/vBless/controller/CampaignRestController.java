@@ -31,6 +31,7 @@ import com.sjsu.backbenchers.vBless.entity.UserRepository;
 import com.sjsu.backbenchers.vBless.model.FileDetail;
 import com.sjsu.backbenchers.vBless.service.CheckImageService;
 import com.sjsu.backbenchers.vBless.service.FileUploadServiceImp;
+import com.sjsu.backbenchers.vBless.service.SlackService;
 
 @RestController
 @RequestMapping("/{tenantId}/campaigns/")
@@ -55,6 +56,10 @@ public class CampaignRestController {
 
 	@Autowired
 	private CheckImageService checkImageService;
+	
+	@Autowired
+	private SlackService slackService;
+	
 	
 	/* Get all Active Campaigns */
 	@RequestMapping(value="/",method=RequestMethod.GET)
@@ -152,7 +157,8 @@ public class CampaignRestController {
 			//Check if the image has any prohibited elements using AWS Image Rekognition
 			boolean flagImage = checkImageService.flagImage(campaignId, fileUpload.getOriginalFilename());
 			if (flagImage) {
-				campaign.setStatus("Inappropriate");
+				campaign.setStatus(Constant.INAPPROPRIATE);
+				slackService.postMessage("Campaign " + campaign.getCampaignTitle() + " created with Inappropriate content is deactivated. Please login to activate.");
 			}
 			campaignRepository.save(campaign);
 		} catch (IOException e) {
