@@ -144,13 +144,13 @@ public class CampaignRestController {
 			campaign=campaignRepository.findByCampaignId(campaignId).get(0);
 			
 			//TODO : Code will fail if image doesn't have an extension
+			String photoName = campaignId+ "." + fileUpload.getOriginalFilename();
 			campaign.setCampaignImageUrl(campaignId+ "." + fileUpload.getOriginalFilename());
 			campaign.setImageBlob(fileUpload.getBytes());
-			System.out.println("file upload called...");
 			fileUploadServiceImp.uploadFile(campaign.getCampaignImageUrl(), fileInputStream);
 
 			//Check if the image has any prohibited elements using AWS Image Rekognition
-			boolean flagImage = checkImageService.flagImage(campaignId, fileUpload.getOriginalFilename());
+			boolean flagImage = checkImageService.flagImage(campaignId, photoName);
 			if (flagImage) {
 				campaign.setStatus("Inappropriate");
 			}

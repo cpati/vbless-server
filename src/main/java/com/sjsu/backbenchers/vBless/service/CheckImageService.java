@@ -1,7 +1,6 @@
 package com.sjsu.backbenchers.vBless.service;
 
 import java.util.List;
-import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,6 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
@@ -23,16 +21,11 @@ import com.amazonaws.services.rekognition.model.DetectLabelsResult;
 import com.amazonaws.services.rekognition.model.Image;
 import com.amazonaws.services.rekognition.model.Label;
 import com.amazonaws.services.rekognition.model.S3Object;
-import com.sjsu.backbenchers.vBless.entity.Campaign;
 import com.sjsu.backbenchers.vBless.entity.CampaignRepository;
-import com.sjsu.backbenchers.vBless.entity.FundDetails;
-import com.sjsu.backbenchers.vBless.entity.FundDetailsRepository;
-import com.sjsu.backbenchers.vBless.entity.User;
-import com.sjsu.backbenchers.vBless.entity.UserRepository;
 
 @Service
 public class CheckImageService {
-	private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+	private static final Logger logger = LoggerFactory.getLogger(CheckImageService.class);
 		
 	@Value("${s3.bucket}")
 	private String bucket;
@@ -51,8 +44,8 @@ public class CheckImageService {
 		boolean suspendCampaign = false;
 		
 		try {
-			// fetch campaign details
-			Campaign campaign = campaignRepository.findByCampaignId(campaignId).get(0);
+			logger.info("awsAccessKeyId:    " + awsAccessKeyId);
+			logger.info("awsSecretKey:    " + awsSecretKey);
 			
 	        AWSCredentials credentials;
 	        try {
@@ -85,13 +78,14 @@ public class CheckImageService {
         	  String lbl = label.getName();
         	  
               System.out.println(lbl + ": " + conf);
-              if (lbl.contentEquals("Gun") && conf > 90.0) {
+              if ((lbl.contentEquals("Gun") && conf > 90.0) || 
+            		  (lbl.contentEquals("Weapon") && conf > 90.0)) {
             	  suspendCampaign = true;  
               }
            }
 
 		} catch(AmazonRekognitionException e) {
-				log.error("AWS Rekognition " + e.getMessage());
+				logger.error("AWS Rekognition " + e.getMessage());
 				e.printStackTrace();
 	           } 
 		  catch (Exception ex) {
