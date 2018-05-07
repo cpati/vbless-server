@@ -1,0 +1,100 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: vbless-server
+spec:
+  selector:
+    matchLabels:
+      app: vbless-server
+      tier: backend
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template: # create pods using pod definition in this template
+    metadata:
+      # unlike pod-nginx.yaml, the name is not included in the meta data as a unique name is
+      # generated from the deployment name
+      labels:
+        app: vbless-server
+        tier: backend
+    spec:
+      containers:
+      - name: vbless-server
+        env:
+        - name: MYSQL_URL
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: url
+        - name: MYSQL_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: password                    
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: aws_access_key_id                    
+        - name: AWS_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: aws_access_key                    
+        - name: S3_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: s3_bucket                    
+        - name: S3_REGION
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: s3_region                    
+        - name: CF_DISTRIBUTION
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: cf_distribution                    
+        - name: HOSTED_ZONE_ID
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: hosted_zone_id                    
+        - name: HOSTED_ZONE_NAME
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: hosted_zone_name                    
+        - name: ALIAS_HOSTED_ZONE_NAME
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: alias_hosted_zone_name                    
+        - name: ALIAS_HOSTED_ZONE_DNS_NAME
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: alias_hosted_zone_dns_name                    
+        - name: OKTA_OAUTH2_ISSUER
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: okta_oauth2_issuer                    
+        - name: OKTA_OAUTH2_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: okta_oauth2_client_id                    
+        - name: OKTA_OAUTH2_CLIENTSECRET
+          valueFrom:
+            secretKeyRef:
+              name: vbless-secret
+              key: okta_oauth2_clientsecret                  
+        image: chidanandapati/vbless-server:v3
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5051

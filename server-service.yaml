@@ -1,0 +1,15 @@
+apiVersion: v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Service
+metadata:
+  labels:
+    app: vbless-server
+  name: vbless-server
+spec:
+  selector:
+    app: vbless-server
+    tier: backend
+  ports:
+  - protocol: "TCP"
+    port: 5051
+    targetPort: 5051
+  type: LoadBalancer  
