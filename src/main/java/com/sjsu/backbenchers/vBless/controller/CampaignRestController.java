@@ -157,8 +157,8 @@ public class CampaignRestController {
 			//Check if the image has any prohibited elements using AWS Image Rekognition
 			boolean flagImage = checkImageService.flagImage(campaignId, photoName);
 			if (flagImage) {
-				campaign.setStatus(Constant.INAPPROPRIATE);
-				slackService.postMessage("Campaign " + campaign.getCampaignTitle() + " created with Inappropriate content is deactivated. Please login to activate.");
+//				campaign.setStatus(Constant.INAPPROPRIATE);
+				slackService.postMessage("Campaign " + campaign.getCampaignTitle() + " created with Inappropriate content. Please review.");
 			}
 			campaignRepository.save(campaign);
 		} catch (IOException e) {

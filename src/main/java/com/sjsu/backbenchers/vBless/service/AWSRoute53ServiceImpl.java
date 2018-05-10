@@ -60,11 +60,16 @@ public class AWSRoute53ServiceImpl implements AWSRoute53Service {
               
         Change change = new Change();
         change.setAction(ChangeAction.CREATE);
+        
         ResourceRecordSet rrs = new ResourceRecordSet();
         rrs.setType(RRType.A);
+        rrs.setSetIdentifier("Oregon region");
+        rrs.setRegion(region);
         rrs.setName(tenantShortName+"."+awsHostedZoneName);
+        
         AliasTarget at = new AliasTarget();
-        at.setHostedZoneId(awsAliasHostedZoneId);
+        String elbHostedZoneID = "Z1H1FL5HABSF5";
+        at.setHostedZoneId(elbHostedZoneID);
         at.setEvaluateTargetHealth(false);
         at.setDNSName(awsAliasHostedDNSName);
         rrs.setAliasTarget(at);
