@@ -11,8 +11,8 @@ pipeline {
             		sh '''
                  /opt/maven/bin/mvn package dockerfile:build -DskipTests;
                  docker login --username=$dockeruserid --password=$dockeruserpw
-                 docker tag vblessimg/vbless chidanandapati/vbless-server:v3.1;
-                 docker push chidanandapati/vbless-server:v3.1;
+                 docker tag vblessimg/vbless chidanandapati/vbless-server:v3.2;
+                 docker push chidanandapati/vbless-server:v3.2;
                  '''
             }
         }
