@@ -71,7 +71,7 @@ public class AWSRoute53ServiceImpl implements AWSRoute53Service {
         String elbHostedZoneID = "Z1H1FL5HABSF5";
         at.setHostedZoneId(elbHostedZoneID);
         at.setEvaluateTargetHealth(false);
-        at.setDNSName(awsAliasHostedDNSName);
+        at.setDNSName("dualstack.adab6d9844a9711e88889024d301f898-708415384.us-west-2.elb.amazonaws.com");
         rrs.setAliasTarget(at);
             
         change.setResourceRecordSet(rrs);
